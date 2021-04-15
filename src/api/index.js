@@ -23,4 +23,8 @@ export default {
   delete_api(obj) {
     return request.post("/api/del", obj).then((res) => res.data);
   },
+  //修改接口
+  edit_api(obj) {
+    return request.post("/api/edit", obj).then((res) => res.data);
+  },
 };

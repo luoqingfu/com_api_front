@@ -15,7 +15,14 @@
       @change="handleTableChange"
     >
       <span slot="action" slot-scope="text, record">
-        <a>修改&nbsp;&nbsp;</a>
+        <a v-if="record.flag === '执行'" @click="edit_api_status(2, record.id)"
+          >设为不执行</a
+        >
+        <a
+          v-else-if="record.flag === '不执行'"
+          @click="edit_api_status(1, record.id)"
+          >设为执行</a
+        >
         <a-divider type="vertical" />
         <a
           type="dashed"
@@ -153,9 +160,9 @@ export default {
       for (let i = 0; i < length; i++) {
         //根据flag匹配该接口的状态
         if (raw_data[i]["flag"] === "1") {
-          raw_data[i]["flag"] = "可执行";
+          raw_data[i]["flag"] = "执行";
         } else if (raw_data[i]["flag"] === "2") {
-          raw_data[i]["flag"] = "不可执行";
+          raw_data[i]["flag"] = "不执行";
         } else {
           raw_data[i]["flag"] = "未知";
         }
@@ -206,6 +213,19 @@ export default {
     },
     destroyAll() {
       this.$destroyAll();
+    },
+    edit_api_status(flag_key, id_key) {
+      let _that = this;
+      let re = { flag: flag_key, id: id_key };
+      service.edit_api(serializeData(re)).then((res) => {
+        if (res.code === 200) {
+          _that.$message.success(res.message, 2);
+          _that.reload();
+        } else {
+          _that.$message.error(res.message, 2);
+          _that.reload();
+        }
+      });
     },
   },
 };
