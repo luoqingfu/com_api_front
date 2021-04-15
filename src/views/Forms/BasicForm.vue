@@ -189,13 +189,14 @@ export default {
               let success_msg = res.message;
               _that.destroyAll();
               _that.$message.success(success_msg, 2);
+              _that.reload();
             } else {
               let err_msg = res.message;
               _that.destroyAll();
               _that.message.error(err_msg, 2);
+              _that.reload();
             }
           });
-          _that.reload();
         },
         onCancel() {
           console.log("Cancel");
