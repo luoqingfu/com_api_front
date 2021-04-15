@@ -27,4 +27,8 @@ export default {
   edit_api(obj) {
     return request.post("/api/edit", obj).then((res) => res.data);
   },
+  //新建接口
+  create_api(obj) {
+    return request.post("api", obj).then((res) => res.data);
+  },
 };

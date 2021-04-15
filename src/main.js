@@ -17,6 +17,7 @@ import {
   Table,
   Pagination,
   Divider,
+  Select,
 } from "ant-design-vue";
 Vue.prototype.$message = message;
 Vue.prototype.$confirm = Modal.confirm;
@@ -35,6 +36,8 @@ Vue.use(Dropdown);
 Vue.use(Table);
 Vue.use(Pagination);
 Vue.use(Divider);
+Vue.use(Modal);
+Vue.use(Select);
 new Vue({
   router,
   store,

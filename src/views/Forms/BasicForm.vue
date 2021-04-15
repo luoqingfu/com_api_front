@@ -6,7 +6,90 @@
       v-model="search_key"
       @search="onSearch"
     />
-    <!-- <a-button @click="refresh_data()">刷新</a-button> -->
+    <a-button type="primary" @click="showModal"> 新建接口 </a-button>
+    <a-modal
+      title="新建接口"
+      :visible="visible"
+      :confirm-loading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    >
+      <a-form :form="form" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+        <a-form-item label="接口名称">
+          <a-input
+            v-decorator="[
+              'api_name',
+              {
+                rules: [{ required: true, message: '请输入接口名称' }],
+              },
+            ]"
+          />
+        </a-form-item>
+        <a-form-item label="接口路径">
+          <a-input
+            v-decorator="[
+              'url',
+              {
+                rules: [{ required: true, message: '请输入接口路径' }],
+              },
+            ]"
+          />
+        </a-form-item>
+        <a-form-item label="请求方法">
+          <a-select
+            v-decorator="[
+              'api_method',
+              {
+                rules: [{ required: true, message: '选择接口请求方法' }],
+              },
+            ]"
+            placeholder="选择接口请求方法"
+          >
+            <a-select-option value="get"> get </a-select-option>
+            <a-select-option value="post"> post </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="是否执行">
+          <a-select
+            v-decorator="[
+              'flag',
+              {
+                rules: [{ required: true, message: '选择是否执行该接口' }],
+              },
+            ]"
+            placeholder="选择是否执行该接口"
+          >
+            <a-select-option value="1"> 执行 </a-select-option>
+            <a-select-option value="2"> 不执行 </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="请求参数">
+          <a-input v-decorator="['request_data']" />
+        </a-form-item>
+        <a-form-item label="请选择项目">
+          <a-select
+            v-decorator="[
+              'project',
+              {
+                rules: [{ required: true, message: '请选择项目' }],
+              },
+            ]"
+            placeholder="请选择项目"
+          >
+            <!-- 遍历project取出id -->
+            <a-select-option
+              v-for="item in project"
+              :key="item.project_name"
+              :value="item.id"
+            >
+              {{ item.project_name }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+
+    <!-- @click="refresh_data()">刷新</!-->
     <a-table
       :columns="columns"
       :data-source="data"
@@ -101,12 +184,17 @@ export default {
     return {
       data: [],
       pagination: {
-        defaultPageSize: 20,
+        defaultPageSize: 10,
       },
       loading: false,
       columns,
       project: [],
       search_key: "",
+      ModalText: "Content of the modal",
+      visible: false,
+      confirmLoading: false,
+      formLayout: "horizontal",
+      form: this.$form.createForm(this, { name: "coordinated" }),
     };
   },
 
@@ -214,6 +302,7 @@ export default {
     destroyAll() {
       this.$destroyAll();
     },
+    //修改接口状态1是执行，2是不执行
     edit_api_status(flag_key, id_key) {
       let _that = this;
       let re = { flag: flag_key, id: id_key };
@@ -226,6 +315,38 @@ export default {
           _that.reload();
         }
       });
+    },
+    showModal() {
+      this.visible = true;
+    },
+    //点击ok后弹出弹窗
+    handleOk(e) {
+      let _that = this;
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log("Received values of form: ", values);
+          //请求新建api接口
+          service.create_api(serializeData(values)).then((rsp) => {
+            if (rsp.code === 200) {
+              //只有code=200时才关闭弹窗
+              _that.$message.success(rsp.message, 2);
+              _that.confirmLoading = true;
+              setTimeout(() => {
+                _that.visible = false;
+                _that.confirmLoading = false;
+                _that.reload();
+              }, 1000);
+            } else {
+              _that.$message.error(rsp.message, 2);
+            }
+          });
+        }
+      });
+    },
+    handleCancel() {
+      console.log("Clicked cancel button");
+      this.visible = false;
     },
   },
 };

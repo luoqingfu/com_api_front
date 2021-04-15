@@ -68,7 +68,7 @@ const routes = [
           {
             path: "/form/basic-form",
             name: "basicform",
-            meta: { title: "新建接口" },
+            meta: { title: "接口" },
             component: () =>
               import(/* webpackChunkName: "form" */ "../views/Forms/BasicForm"),
           },
