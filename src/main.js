@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import storage from "./utils/storage";
-import { Modal } from "ant-design-vue";
+import { Modal, message } from "ant-design-vue";
 import {
   Button,
   Layout,
@@ -18,10 +18,11 @@ import {
   Pagination,
   Divider,
 } from "ant-design-vue";
-
+Vue.prototype.$message = message;
 Vue.prototype.$confirm = Modal.confirm;
 Vue.config.productionTip = false;
 Vue.prototype.$storage = storage;
+Vue.prototype.$destroyAll = Modal.destroyAll;
 Vue.use(Button);
 Vue.use(Layout);
 Vue.use(Icon);

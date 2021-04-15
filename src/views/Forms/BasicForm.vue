@@ -6,7 +6,7 @@
       v-model="search_key"
       @search="onSearch"
     />
-    <a-button @click="refresh_data()">刷新</a-button>
+    <!-- <a-button @click="refresh_data()">刷新</a-button> -->
     <a-table
       :columns="columns"
       :data-source="data"
@@ -172,6 +172,7 @@ export default {
       return handle_data;
     },
     showDeleteConfirm(del_key) {
+      let _that = this;
       this.$confirm({
         title: "确定需要删除该条接口吗？",
         // content: "删除？",
@@ -185,19 +186,25 @@ export default {
           //逻辑删除
           service.delete_api(serializeData(re)).then((res) => {
             if (res.code === 200) {
-              this.reload();
+              let success_msg = res.message;
+              _that.destroyAll();
+              _that.$message.success(success_msg, 2);
             } else {
-              console.log(res.message);
+              let err_msg = res.message;
+              _that.destroyAll();
+              _that.message.error(err_msg, 2);
             }
           });
+          _that.reload();
         },
         onCancel() {
           console.log("Cancel");
+          _that.destroyAll();
         },
       });
     },
-    refresh_data() {
-      this.reload();
+    destroyAll() {
+      this.$destroyAll();
     },
   },
 };
