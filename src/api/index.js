@@ -31,4 +31,8 @@ export default {
   create_api(obj) {
     return request.post("api", obj).then((res) => res.data);
   },
+  //类postman接口测试，
+  postman_api(obj) {
+    return request.post("/api/sendRequest", obj).then((res) => res.data);
+  },
 };

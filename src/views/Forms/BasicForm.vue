@@ -86,6 +86,11 @@
             </a-select-option>
           </a-select>
         </a-form-item>
+        <a-form-item>
+          <a-button @click="send_request_test">test</a-button>
+          <br />
+          <p>{{ send_request_test_data }}</p>
+        </a-form-item>
       </a-form>
     </a-modal>
 
@@ -195,6 +200,7 @@ export default {
       confirmLoading: false,
       formLayout: "horizontal",
       form: this.$form.createForm(this, { name: "coordinated" }),
+      send_request_test_data: "",
     };
   },
 
@@ -347,6 +353,31 @@ export default {
     handleCancel() {
       console.log("Clicked cancel button");
       this.visible = false;
+    },
+    //测试接口是否通
+    send_request_test(e) {
+      let _that = this;
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log("Received values of form: ", values);
+          //从project中取出url
+          let project_id = values["project"];
+          let project_length = Object.keys(_that.project).length;
+          for (let t = 0; t < project_length; t++) {
+            if (_that.project[t]["id"] == project_id) {
+              //从前端获取的url加上了baseurl
+              values["url"] = _that.project[t]["base_url"] + values["url"];
+            }
+          }
+          //
+          //请求新建api接口
+          service.postman_api(serializeData(values)).then((rsp) => {
+            //取rsp的值显示在界面上
+            _that.send_request_test_data = rsp;
+          });
+        }
+      });
     },
   },
 };

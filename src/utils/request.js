@@ -40,7 +40,6 @@ service.interceptors.response.use(
     } else {
       console.log("err" + error);
     }
-
     return Promise.reject(error);
   }
 );
