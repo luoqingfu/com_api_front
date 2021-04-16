@@ -35,4 +35,22 @@ export default {
   postman_api(obj) {
     return request.post("/api/sendRequest", obj).then((res) => res.data);
   },
+  //获取项目列表
+  project_get(obj) {
+    return request.get("/project", { params: obj }).then((res) => res.data);
+  },
+  //删除项目
+  project_del(obj) {
+    return request.post("project/del", obj).then((res) => res.data);
+  },
+  //搜索项目
+  project_search(obj) {
+    return request
+      .get("project/search", { params: obj })
+      .then((res) => res.data);
+  },
+  //新建项目
+  project_create(obj) {
+    return request.post("/project", obj).then((res) => res.data);
+  },
 };
