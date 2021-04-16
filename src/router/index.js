@@ -63,36 +63,23 @@ const routes = [
         path: "/form",
         name: "form",
         component: { render: (h) => h("router-view") },
-        meta: { icon: "form", title: "接口" },
+        meta: { icon: "form", title: "资源管理" },
         children: [
           {
-            path: "/form/basic-form",
-            name: "basicform",
+            path: "/form/api-form",
+            name: "apiform",
             meta: { title: "接口" },
             component: () =>
-              import(/* webpackChunkName: "form" */ "../views/Forms/BasicForm"),
+              import(/* webpackChunkName: "form" */ "../views/Forms/ApiForm"),
           },
           {
-            path: "/form/step-form",
-            name: "stepform",
-            hideChildrenInMenu: true,
-            meta: { title: "分布表单" },
+            path: "/form/project-form",
+            name: "projectform",
+            meta: { title: "项目" },
             component: () =>
-              import(/* webpackChunkName: "form" */ "../views/Forms/StepForm"),
-            children: [
-              {
-                path: "/form/step-form",
-                redirect: "/form/step-form/info",
-              },
-              {
-                path: "/form/step-form/info",
-                name: "info",
-                component: () =>
-                  import(
-                    /* webpackChunkName: "form" */ "../views/Forms/StepForm/Step1"
-                  ),
-              },
-            ],
+              import(
+                /* webpackChunkName: "form" */ "../views/Forms/ProjectForm"
+              ),
           },
         ],
       },
