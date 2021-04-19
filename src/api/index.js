@@ -53,4 +53,10 @@ export default {
   project_create(obj) {
     return request.post("/project", obj).then((res) => res.data);
   },
+  //获取项目测试结果
+  project_get_testsummary(obj) {
+    return request
+      .get("apitest/summary", { params: obj })
+      .then((res) => res.data);
+  },
 };

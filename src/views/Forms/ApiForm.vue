@@ -189,7 +189,7 @@ export default {
     return {
       data: [],
       pagination: {
-        defaultPageSize: 10,
+        defaultPageSize: 20,
       },
       loading: false,
       columns,
